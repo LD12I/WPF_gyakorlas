@@ -31,13 +31,75 @@ namespace WPF_gyakorlas
             InitializeComponent();
             UpdateAges();
             UpdateNames();
+
+
+            CreateButton.Click += (s,e) => {
+                on();
+                Add.Visibility = Visibility.Visible;
+                Delete.Visibility = Visibility.Collapsed;
+                DeleteAll.Visibility = Visibility.Collapsed;
+                UpdatePerson.Visibility = Visibility.Collapsed;
+                Title.Text = "Modify: Add";
+
+                CreateNameTB.Visibility = Visibility.Visible;
+                EditTBName.Visibility = Visibility.Collapsed;
+                CreateAgeTB.Visibility = Visibility.Visible;
+            };
+
+
+            DeleteButton.Click += (s, e) => {
+                on();
+                Add.Visibility = Visibility.Collapsed;
+                Delete.Visibility = Visibility.Visible;
+                DeleteAll.Visibility = Visibility.Collapsed;
+                UpdatePerson.Visibility = Visibility.Collapsed;
+                Title.Text = "Modify: Delete";
+                CreateNameTB.Visibility = Visibility.Visible;
+                EditTBName.Visibility = Visibility.Collapsed;
+                CreateAgeTB.Visibility = Visibility.Collapsed;
+            };
+
+            EditButton.Click += (s, e) => {
+                on();
+                Add.Visibility = Visibility.Collapsed;
+                Delete.Visibility = Visibility.Collapsed;
+                DeleteAll.Visibility = Visibility.Collapsed;
+                UpdatePerson.Visibility = Visibility.Visible;
+                Title.Text = "Modify: update";
+                CreateNameTB.Visibility = Visibility.Visible;
+                EditTBName.Visibility = Visibility.Visible;
+                CreateAgeTB.Visibility = Visibility.Visible;
+            };
+
+
+
+            this.KeyDown += (s, e) =>
+            {
+                if (e.Key == Key.Escape)
+                {
+                    doff();
+                }
+            };
         }
+
 
         private async void Add_Click(object sender, RoutedEventArgs e)
         {
-            await sc.CreatePerson(CreateNameTB.Text, Convert.ToInt32(CreateAgeTB.Text));
-            UpdateAges();
-            UpdateNames();
+            try
+            {
+
+                await sc.CreatePerson(CreateNameTB.Text, Convert.ToInt32(CreateAgeTB.Text));
+                CreateNameTB.Text = "";
+                CreateAgeTB.Text = "";
+                UpdateAges();
+                UpdateNames();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show("hiba, adj meg nevet, és kort");
+            }
+            doff();
+
         }
 
 
@@ -47,6 +109,7 @@ namespace WPF_gyakorlas
             NameSp.Children.Clear();
             names = await sc.getAllNames();
 
+
             if (names.Count > 0)
             {
                 for (int i = 0; i < names.Count; i++)
@@ -54,15 +117,14 @@ namespace WPF_gyakorlas
                     NameSp.Children.Add(new TextBlock() { Text = names[i], FontSize = 20, Foreground = Brushes.White, HorizontalAlignment = HorizontalAlignment.Center });
                 }
             }
-
         }
-
 
         private async void UpdateAges()
         {
             ages.Clear();
             AgeSp.Children.Clear();
             ages = await sc.getAllages();
+
 
             if (ages.Count > 0)
             {
@@ -76,9 +138,67 @@ namespace WPF_gyakorlas
 
         private async void Delete_Click(object sender, RoutedEventArgs e)
         {
-            await sc.DeletePersonAsync(CreateNameTB.Text);
+            try
+            {
+                await sc.DeletePersonAsync(CreateNameTB.Text);
+                CreateNameTB.Text = "";
+                CreateAgeTB.Text = "";
+                UpdateAges();
+                UpdateNames();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show("hiba, adj meg nevet");
+            }
+            doff();
+        }
+
+        private async void DeleteAll_Click(object sender, RoutedEventArgs e)
+        {
+            await sc.DeleteAllPersonsAsync();
+            CreateNameTB.Text = "";
+            CreateAgeTB.Text = "";
             UpdateAges();
             UpdateNames();
+        }
+
+        private async void UpdatePerson_Click(object sender, RoutedEventArgs e)
+        {
+            await sc.UpdatePerson(EditTBName.Text, CreateNameTB.Text, CreateAgeTB.Text);
+            CreateNameTB.Text = "";
+            CreateAgeTB.Text = "";
+            UpdateAges();
+            UpdateNames();
+            doff();
+        }
+
+
+
+        void on()
+        {
+            modifyREC.Visibility = Visibility.Visible;
+            ModidyTable.Visibility = Visibility.Visible;
+        }
+
+        void doff() 
+        {
+            modifyREC.Visibility = Visibility.Hidden;
+            ModidyTable.Visibility = Visibility.Hidden;
+        }
+
+        private void EditTBName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (names.Count > 0)
+            {
+                for (int i = 0; i < names.Count; i++)
+                {
+                    if (EditTBName.Text == names[i])
+                    {
+                        CreateNameTB.Text = names[i];
+                        CreateAgeTB.Text = ages[i].ToString();
+                    }
+                }
+            }
         }
     }
 }

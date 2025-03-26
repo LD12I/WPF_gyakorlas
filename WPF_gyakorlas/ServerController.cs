@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Xml.Linq;
 using Newtonsoft.Json;
 
 namespace WPF_gyakorlas
@@ -27,31 +28,27 @@ namespace WPF_gyakorlas
 
             try
             {
-                    HttpResponseMessage response = await client.GetAsync(nameURL);
-                    response.EnsureSuccessStatusCode();
+                HttpResponseMessage response = await client.GetAsync(nameURL);
+                response.EnsureSuccessStatusCode();
 
-                    string result = await response.Content.ReadAsStringAsync(); 
-                    list = JsonConvert.DeserializeObject<List<JsonData>>(result).Select(item => item.name).ToList();
-                
+                string result = await response.Content.ReadAsStringAsync();
+                list = JsonConvert.DeserializeObject<List<JsonData>>(result).Select(item => item.name).ToList();
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Hiba történt: " + ex.Message); 
+                MessageBox.Show("Hiba történt: " + ex.Message);
             }
 
             return list;
         }
-
-
 
         public async Task DeletePersonAsync(string name)
         {
             string url = "http://localhost:3000/deletePerson";
 
             var data = new { name = name };
-
             string jsonContent = JsonConvert.SerializeObject(data);
-
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
 
@@ -62,7 +59,7 @@ namespace WPF_gyakorlas
 
                 if (response.IsSuccessStatusCode)
                 {
-                    MessageBox.Show(responseBody);
+                    //MessageBox.Show(responseBody);
                 }
                 else
                 {
@@ -81,34 +78,33 @@ namespace WPF_gyakorlas
 
             try
             {
-                    var personData = new
-                    {
-                        name = name,
-                        age = age
-                    };
-                    string jsonData = JsonConvert.SerializeObject(personData);
-                    StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-                    HttpResponseMessage response = await client.PostAsync(registerURL, content);
+                var personData = new
+                {
+                    name = name,
+                    age = age
+                };
+                string jsonData = JsonConvert.SerializeObject(personData);
+                StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(registerURL, content);
 
-                    string responseBody = await response.Content.ReadAsStringAsync();
+                string responseBody = await response.Content.ReadAsStringAsync();
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        MessageBox.Show(responseBody);
-                    }
-                    else
-                    {
-                        string errorMessage = await response.Content.ReadAsStringAsync();
-                        MessageBox.Show("Hiba történt az emberkísérletek során:" + errorMessage);
-                    }
-                
+                if (response.IsSuccessStatusCode)
+                {
+                    //MessageBox.Show(responseBody);
+                }
+                else
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show("Hiba történt az emberkísérletek során:" + errorMessage);
+                }
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Hiba történt: " + ex.Message);
             }
         }
-
 
         public async Task<List<int>> getAllages()
         {
@@ -117,14 +113,11 @@ namespace WPF_gyakorlas
 
             try
             {
-                using (HttpClient client = new HttpClient())
-                {
-                    HttpResponseMessage response = await client.GetAsync(nameURL);
-                    response.EnsureSuccessStatusCode();
+                HttpResponseMessage response = await client.GetAsync(nameURL);
+                response.EnsureSuccessStatusCode();
 
-                    string result = await response.Content.ReadAsStringAsync();
-                    list = JsonConvert.DeserializeObject<List<JsonData>>(result).Select(item => item.age).ToList();
-                }
+                string result = await response.Content.ReadAsStringAsync();
+                list = JsonConvert.DeserializeObject<List<JsonData>>(result).Select(item => item.age).ToList();
             }
             catch (Exception ex)
             {
@@ -133,6 +126,47 @@ namespace WPF_gyakorlas
 
             return list;
         }
+
+        public async Task DeleteAllPersonsAsync()
+        {
+            try
+            {
+                string url = "http://localhost:3000/deleteAllPerson";
+
+                HttpResponseMessage response = await client.PostAsync(url, null);
+
+            }
+            catch (HttpRequestException ex)
+            {
+                MessageBox.Show($"Hiba {ex.Message}");
+            }
+        }
+
+        public async Task UpdatePerson(string searchname, string nametoupdate, string agetoupdate)
+        {
+            try
+            {
+                string url = "http://localhost:3000/updatePerson";
+
+
+                var data = new
+                {
+                    searchname = searchname, 
+                    name = nametoupdate,     
+                    age = agetoupdate        
+                };
+                var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+                var response = await client.PutAsync(url, content);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hiba a kapcsolat során: {ex.Message}");
+            }
+        }
+
+
+
     }
     class JsonData
     {

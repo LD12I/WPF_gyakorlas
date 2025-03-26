@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF_gyakorlas" Background="	#161616"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="1200" Width="1920" WindowState="Maximized" ResizeMode="NoResize">
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -18,48 +19,123 @@
         </Grid.RowDefinitions>
 
 
-        <TextBlock FontSize="20" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" Foreground="White">Name</TextBlock>
-        <TextBlock FontSize="20" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2" Foreground="White">Age</TextBlock>
-        <TextBlock FontSize="30" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2" Foreground="White">_____________</TextBlock>
-        <TextBlock FontSize="30" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" Foreground="White">_____________</TextBlock>
-        <TextBlock FontSize="20" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1" Foreground="White" Grid.ColumnSpan="2" >Age</TextBlock>
-
-        <StackPanel Name="NameSp" Orientation="Vertical" Margin="20,50,20,20"  Background="#242424" Grid.Column="1">
-
-        </StackPanel>
-
-        <TextBlock Foreground="Red" FontSize="60" Width="350" Height="120" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2" Margin="-38,108,221,98">
-            <TextBlock.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="-53.524"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </TextBlock.RenderTransform>
-            Out of order
-        </TextBlock>
-
-        <StackPanel Background="#242424" Name="AgeSp" Orientation="Vertical" Margin="20,50,20,20" Grid.Column="2">
-
-        </StackPanel>
 
 
-        <TextBox Background="#242424" Foreground="White" BorderThickness="0" Name="CreateNameTB" FontSize="20" Grid.Row="1" Grid.Column="1" Width="240" Height="30">
-            Name
-        </TextBox>
 
-        <TextBox Background="#242424" Foreground="White" BorderThickness="0" Name="CreateAgeTB" Grid.Row="1" FontSize="20" Grid.Column="2" Width="240" Height="30">
-            20
-        </TextBox>
+        <Border HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" Background="#242424" Height="50" VerticalAlignment="Top" Margin="0,20,0,0" 
+                BorderThickness="2" CornerRadius="20" BorderBrush="Orange" Width="600">
 
-        <Button Background="#242424" Foreground="White" BorderThickness="0" Width="100" HorizontalAlignment="Left" FontSize="30" Name="Add" Click="Add_Click" Margin="20" Content="Create" Grid.Row="1">
+            <TextBlock  HorizontalAlignment="Center"  FontSize="20" Foreground="Orange">Name</TextBlock>
+        </Border>
 
-        </Button>
 
-        <Button Background="#242424" Foreground="White" BorderThickness="0" FontSize="30" Name="Delete" Width="100" HorizontalAlignment="Right" Click="Delete_Click" Margin="20" Content="Delete" Grid.Row="1">
+        <Border HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2" Background="#242424" Height="50" VerticalAlignment="Top" Margin="0,20,0,0" 
+                BorderThickness="2" CornerRadius="20" BorderBrush="Orange" Width="600">
 
-        </Button>
+            <TextBlock FontSize="20" HorizontalAlignment="Center" Foreground="Orange">Age</TextBlock>
+        </Border>
+
+       
+        <Border  Margin="20,140,20,20"  Grid.Column="1" BorderBrush="Orange" BorderThickness="3" CornerRadius="30" Background="#242424">
+            <StackPanel Name="NameSp" Orientation="Vertical" Margin="20,50,20,20"  Background="#242424">
+
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Column="2" Margin="20,140,20,20" Background="#242424" CornerRadius="30" BorderBrush="Orange" BorderThickness="3">
+            <StackPanel Background="#242424" Name="AgeSp" Orientation="Vertical" Margin="20,50,20,20" >
+
+            </StackPanel>
+        </Border>
+
+
+        <Border Margin="120,140,120,20" Background="#242424" CornerRadius="30" BorderBrush="Orange" BorderThickness="3">
+            <Grid>
+
+                <TextBlock FontSize="30" Margin="20" HorizontalAlignment="Center" Height="50" VerticalAlignment="Top" Foreground="Orange" FontWeight="Bold">
+                    Database modify Table
+                </TextBlock>
+                
+                <Button Name="CreateButton" Background="#161616" Foreground="Orange"  BorderThickness="2" BorderBrush="Orange" Width="220" FontSize="30"
+                        Margin="20,170,0,0" Content="Create Opener" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50"/>
+
+
+
+                <Button Name="DeleteButton" Background="#161616" Foreground="Orange"  BorderThickness="2" BorderBrush="Orange" Width="220" FontSize="30"
+                        Margin="20,270,0,0" Content="Delete Opener" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50"/>
+
+
+
+                <Button Name="DeleteAllButton" Background="#161616" Foreground="Orange"  BorderThickness="2" BorderBrush="Orange" Width="220" FontSize="30"
+          Margin="20,370,0,0" Content="Delete All op." Click="DeleteAll_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50"/>
+
+
+
+
+                <Button Name="EditButton" Background="#161616" Foreground="Orange"  BorderThickness="2" BorderBrush="Orange" Width="220" FontSize="30"
+          Margin="20,470,0,0" Content="Edit Opener" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50"/>
+
+
+
+  
+            </Grid>
+        </Border>
+
+        <Border>
+            <Grid>
+                
+            </Grid>
+        </Border>
+        
+
+
+        <Rectangle Visibility="Hidden" Name="modifyREC" Fill="Black" Grid.ColumnSpan="3" Opacity="0.7" Grid.RowSpan="2">
+            <Rectangle.Effect>
+                <BlurEffect Radius="100"/>
+            </Rectangle.Effect>
+        </Rectangle>
+
+
+        <Border Visibility="Collapsed" Name="ModidyTable" CornerRadius="30" BorderThickness="3" BorderBrush="Orange" Grid.ColumnSpan="3" Grid.RowSpan="2" 
+                Width="700" Height="600" Background="#161616">
+            <Grid>
+
+                <TextBlock Foreground="Orange" Name="Title" FontSize="30" FontWeight="Bold" Height="50"
+                           HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,50,0,0">
+                    Modify: Add Person
+                </TextBlock>
+
+                <TextBox  Background="#242424" Foreground="White" BorderThickness="2" Margin="0,200,0,0" BorderBrush="Orange" Name="CreateNameTB" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="20" Width="400" Height="30">
+                    Name
+                </TextBox>
+
+                <TextBox Background="#242424" TextChanged="EditTBName_TextChanged" Foreground="White" BorderThickness="2" Margin="0,300,0,0"  BorderBrush="Orange" Name="EditTBName" VerticalAlignment="Top" FontSize="20" Width="400" Height="30">
+                    Name Editor
+                </TextBox>
+
+                <TextBox Background="#242424" Foreground="White" Name="CreateAgeTB" Margin="0,400,0,0"  FontSize="20" Width="400" 
+                         Height="30" VerticalAlignment="Top" BorderThickness="2" BorderBrush="Orange">
+                    20
+                </TextBox>
+
+                
+                <Button Background="#161616" Foreground="Orange" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" BorderBrush="Orange" 
+                        Margin="0,0,0,50" Width="300" FontSize="30" Name="Add" Click="Add_Click" Content="Send" Height="50"/>
+
+                <Button Background="#161616"  Foreground="Orange" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Bottom"  BorderBrush="Orange" 
+                        FontSize="30" Name="Delete" Width="300" Height="50" Click="Delete_Click" Margin="0,0,0,50" Content="Send"/>
+
+                <Button  Background="#161616" Foreground="Orange" BorderThickness="2" BorderBrush="Orange" FontSize="30" Name="DeleteAll" Width="300" Height="50"
+             Click="DeleteAll_Click"  Margin="0,0,0,50"  Content="Send" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+
+                <Button Background="#161616" Foreground="Orange" BorderThickness="2" BorderBrush="Orange" FontSize="30" Name="UpdatePerson" Width="300" Height="50"
+             Click="UpdatePerson_Click" Margin="0,0,0,50" Content="Send" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+
+
+            </Grid>
+        </Border>
+
+
 
     </Grid>
 </Window>
